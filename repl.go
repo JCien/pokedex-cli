@@ -7,6 +7,27 @@ import (
 	"strings"
 )
 
+type cliCommand struct {
+	name        string
+	description string
+	callback    func() error
+}
+
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
+		},
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
+	}
+}
+
 func startRepl() {
 	// Blocks the code and waits for input,
 	// once the user types something and presses enter,
@@ -23,9 +44,19 @@ func startRepl() {
 			continue
 		}
 
-		command := input[0]
+		usrInput := input[0]
 
-		fmt.Printf("Your command was: %v\n", command)
+		command, exists := getCommands()[usrInput]
+		if exists {
+			err := command.callback()
+			if err != nil {
+				fmt.Println(err)
+			}
+			continue
+		} else {
+			fmt.Printf("Unknown command: %v\n", usrInput)
+			continue
+		}
 	}
 }
 
