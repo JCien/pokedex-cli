@@ -5,12 +5,20 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/JCien/pokedex-cli/internal/pokedexapi"
 )
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
+}
+
+type config struct {
+	pokeapiClient    pokedexapi.Client
+	nextLocationsURL *string
+	prevLocationsURL *string
 }
 
 func getCommands() map[string]cliCommand {
@@ -25,10 +33,20 @@ func getCommands() map[string]cliCommand {
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
+		"map": {
+			name:        "map",
+			description: "Displays the next 20 locations",
+			callback:    commandMapf,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Displays the previous 20 locations",
+			callback:    commandMapb,
+		},
 	}
 }
 
-func startRepl() {
+func startRepl(cfg *config) {
 	// Blocks the code and waits for input,
 	// once the user types something and presses enter,
 	// the code continues and the input is available in the returned scanner.
@@ -48,7 +66,7 @@ func startRepl() {
 
 		command, exists := getCommands()[usrInput]
 		if exists {
-			err := command.callback()
+			err := command.callback(cfg)
 			if err != nil {
 				fmt.Println(err)
 			}
