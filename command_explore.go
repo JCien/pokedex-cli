@@ -1,25 +1,22 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"net/url"
 )
 
-func commandExplore(cfg *config, area_name string) error {
-	parsedURL, err := url.Parse(*cfg.nextLocationsURL)
+func commandExplore(cfg *config, args ...string) error {
+	if len(args) != 1 {
+		return errors.New("Must provide a location name.")
+	}
+
+	name := args[0]
+	pokemonResp, err := cfg.pokeapiClient.ListPokemon(name)
 	if err != nil {
 		return err
 	}
 
-	defaultURL := parsedURL.Scheme + "://" + parsedURL.Hostname() + parsedURL.Path
-	location_url := defaultURL + "/" + area_name
-
-	pokemonResp, err := cfg.pokeapiClient.ListPokemon(&location_url)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Exploring %v...\n", area_name)
+	fmt.Printf("Exploring %v...\n", args[0])
 	fmt.Println("Found Pokemon:")
 
 	for _, poke := range pokemonResp.PokemonEncounters {

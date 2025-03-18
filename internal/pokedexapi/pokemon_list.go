@@ -6,11 +6,8 @@ import (
 	"net/http"
 )
 
-func (c *Client) ListPokemon(pageURL *string) (RespPokemon, error) {
-	url := baseURL + "/location-area"
-	if pageURL != nil {
-		url = *pageURL
-	}
+func (c *Client) ListPokemon(locationName string) (RespPokemon, error) {
+	url := baseURL + "/location-area/" + locationName
 
 	if val, ok := c.cache.Get(url); ok {
 		pokemonResp := RespPokemon{}
