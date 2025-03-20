@@ -19,6 +19,7 @@ type config struct {
 	pokeapiClient    pokedexapi.Client
 	nextLocationsURL *string
 	prevLocationsURL *string
+	caughtPokemon    map[string]pokedexapi.PokemonInfo
 }
 
 func getCommands() map[string]cliCommand {

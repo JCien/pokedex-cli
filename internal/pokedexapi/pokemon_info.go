@@ -6,8 +6,8 @@ import (
 	"net/http"
 )
 
-func (c *Client) PokemonInfo(PokemonName string) (PokemonInfo, error) {
-	url := baseURL + "/pokemon/" + PokemonName
+func (c *Client) PokemonInfo(pokemonName string) (PokemonInfo, error) {
+	url := baseURL + "/pokemon/" + pokemonName
 
 	if val, ok := c.cache.Get(url); ok {
 		pokemonInfo := PokemonInfo{}

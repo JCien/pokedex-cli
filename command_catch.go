@@ -6,11 +6,6 @@ import (
 	"math/rand"
 )
 
-type Pokemon struct {
-	Name           string
-	BaseExperience int
-}
-
 func commandCatch(cfg *config, args ...string) error {
 	if len(args) != 1 {
 		return errors.New("Must provide a Pokemon name.")
@@ -28,6 +23,7 @@ func commandCatch(cfg *config, args ...string) error {
 
 	if rand.Intn(catchVar) == int(catchVar/2) {
 		fmt.Printf("%v was caught!\n", name)
+		cfg.caughtPokemon[pokemonInfo.Name] = pokemonInfo
 	} else {
 		fmt.Printf("%v escaped!\n", name)
 	}
