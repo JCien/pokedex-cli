@@ -6,6 +6,11 @@ import (
 	"math/rand"
 )
 
+type Pokemon struct {
+	Name           string
+	BaseExperience int
+}
+
 func commandCatch(cfg *config, args ...string) error {
 	if len(args) != 1 {
 		return errors.New("Must provide a Pokemon name.")
